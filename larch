@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+HOST="larch" #change this to the name of the server you want to connect to
+             #if you do, better rename this program
+
+ARGV.unshift $0 unless $0==HOST
+
+exec "sshh", ENV['USER']+"@"+HOST, *ARGV
