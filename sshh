@@ -3,20 +3,21 @@
 argv=ARGV.dup
 while arg=argv.shift
   case arg
-  when /\A-[^bcDeFiLlmOoPRSw]*i(.*)\z/
-    exec "ssh", *ARGV
-  when /\A-[^bcDeFiLlmOoPRSw]*l(.*)\z/
-    login=$1.empty? ? argv.shift : $1
-  when /\A-[^bcDeFiLlmOoPRSw]*([bcDeFLmOoPRSw])(.*)\z/
+  when /\A-[^bcDeFiLlmOoPRSw]*i(.*)\z/ #see a -i option?
+    exec "ssh", *ARGV                  #skip directly to ssh
+  when /\A-[^bcDeFiLlmOoPRSw]*l(.*)\z/ #see a -l option?
+    login=$1.empty? ? argv.shift : $1  #remember arg as login name
+  when /\A-[^bcDeFiLlmOoPRSw]*([bcDeFLmOoPRSw])(.*)\z/ #see option taking an arg?
+    #skip past the arg
     if $2.empty?
       argv.shift
     else
       #do nothing
     end
-  when /\A-[^bcDeFiLlmOoPRSw]/
+  when /\A-[^bcDeFiLlmOoPRSw]/ #see an option not taking an arg?
     #do nothing
-  else
-    break user_host=arg
+  else #see a non-option argument
+    break user_host=arg  #it must be the host(&user?) to connect to
   end
 end
 user,host=user_host.split('@',2)
