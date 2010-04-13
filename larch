@@ -6,14 +6,21 @@ HOST="larch" #change this to the name of the server you want to connect to
 program=File.basename($0)
 ARGV.unshift program unless program==HOST
 
+def bash_quote word
+  "'#{word.gsub("'","'\\\\''")}'"
+end
+alias quote bash_quote
+
 #quote all words in cmdline, cause ssh doesn't do it
 #this is bash quoting semantics. might not work with zsh/csh/ksh/etc
-ARGV.map!{|w| "'#{word.gsub("'","'\\\\''")}'" }
+ARGV.map!{|w| quote w }
+
+prelude=["cd", quote(Dir.pwd), "2>/dev/null", ";"]
 
 #make sure user's env var settings on server are available
 #at least, we hope he put them into .bash_profile, not .bashrc
 #bash specific
-ARGV.unshift("source", "~/.bash_profile", ";") unless ARGV.empty?
+prelude.unshift("source", "~/.bash_profile", ";") unless ARGV.empty?
 
 #workaround for a ????ssh bug????
 if STDIN.tty? and !STDOUT.tty?
@@ -25,5 +32,5 @@ ssh_args=["-e", "none", ENV['USER']+"@"+HOST]
 ssh_args.unshift("-t", "-t") if STDIN.tty? #force ttyness
 ssh_args.unshift("-q", "-q") unless ARGV.empty? #force quietude
 
-system "sshh", *ssh_args+ARGV
+system "sshh", *ssh_args+prelude+ARGV
 Process.kill "KILL",cat.pid if cat
