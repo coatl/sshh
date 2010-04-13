@@ -47,4 +47,5 @@ unless File.exist?(keyfile)
   #(what a stupid PITA. this should be built in to ssh)
 end
 
+#p ["ssh", "-i", keyfile, *ARGV].join(' ')
 exec "ssh", "-i", keyfile, *ARGV
