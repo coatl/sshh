@@ -20,6 +20,8 @@ while arg=argv.shift
     break user_host=arg  #it must be the host(&user?) to connect to
   end
 end
+
+exec "ssh", *ARGV unless user_host
 user,host=user_host.split('@',2)
 user,host=login||ENV['USER']||File.basename(ENV['HOME']),user unless host
 
