@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/ruby
 #gotta parse cmdline args exactly like ssh does
 argv=ARGV.dup
 while arg=argv.shift

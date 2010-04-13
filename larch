@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/ruby
 HOST="larch" #change this to the name of the server you want to connect to
              #if you do, better rename this program
 
